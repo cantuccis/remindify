@@ -29,6 +29,7 @@ class FirebaseAuthService extends AuthService {
         email: email,
         password: password,
       );
+
       await _firebaseAuth
           .setPersistence(persist ? Persistence.SESSION : Persistence.NONE);
 
@@ -39,10 +40,10 @@ class FirebaseAuthService extends AuthService {
       }
 
       _firebaseAuth.userChanges().listen((event) {
-        if(event == null) {
+        if (event == null) {
           onSignedOut();
         }
-       });
+      });
     } catch (e, stacktrace) {
       handleException(e, stacktrace);
       if (e is FirebaseAuthException) {
@@ -83,7 +84,7 @@ class FirebaseAuthService extends AuthService {
       final exists = (existsResult as ResultSuccess<bool>).data;
       if (exists) return Result.error(message: "User already exists");
 
-      UserCredential  authResult =
+      UserCredential authResult =
           await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -99,5 +100,17 @@ class FirebaseAuthService extends AuthService {
       handleException(e, stacktrace, info: "email: $email");
       return Result.error();
     }
+  }
+
+  @override
+  Future<Result<RemindifyUser?>> restoreSession() async {
+    late final Result<RemindifyUser?> result;
+    final firebaseUser = await FirebaseAuth.instance.userChanges().first;
+    if (firebaseUser != null) {
+        result = await _userRepository.getUser(userId: firebaseUser.uid);
+    } else {
+        result = Result.success(data: null);
+    }
+    return result;
   }
 }

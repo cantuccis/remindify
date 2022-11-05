@@ -30,6 +30,7 @@ class _SignInCardState extends State<SignInCard> {
     super.initState();
     _authCubit = BlocProvider.of<AuthCubit>(context);
     _authCubit.resetFields();
+    _authCubit.restoreSession();
   }
 
   @override

@@ -11,6 +11,20 @@ class AuthCubit extends Cubit<AuthState> {
     _authService = GetIt.instance.get<AuthService>();
   }
 
+  Future<void> restoreSession() async {
+    emit(state.toLoading());
+    final result = await _authService.restoreSession();
+    result.when(
+        onSuccess: (user) {
+          if (user != null) {
+            emit(state.toSuccess().copyWith(userSignedIn: user));
+          } else {
+            emit(state.toSuccess());
+          }
+        },
+        onError: (e) => emit(state.toError(error: e)));
+  }
+
   Future<void> signInSubmit(String email, String password) async {
     emit(state.toLoading());
     final result = await _authService.signInWithEmailAndPassword(

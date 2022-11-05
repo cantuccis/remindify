@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:remindify/features/auth/bloc/auth_cubit.dart';
+import 'package:remindify/features/auth/bloc/auth_state.dart';
 import 'package:remindify/features/auth/widgets/auth_enforce.dart';
 import 'package:remindify/features/auth/widgets/sing_in_card.dart';
 import 'package:remindify/features/sign_up/widgets/sing_up_card.dart';
@@ -21,19 +24,41 @@ class _HomeScreenState extends State<HomeScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     return AuthEnforce(
       child: Scaffold(
-        body: ListView(
-          shrinkWrap: true,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Hello world!"),
-                ],
-              ),
-            )
-          ],
+        body: Center(
+          child: SizedBox(
+            width: 1024,
+            child: ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      BlocBuilder<AuthCubit, AuthState>(builder: (ctx, state) {
+                        return Row(children: [
+                          Text(
+                              state.currentUser?.email ?? "No email available"),
+                          const Spacer(),
+                          TextButton(
+                              onPressed: () =>
+                                  BlocProvider.of<AuthCubit>(context).signOut(),
+                              child: Row(
+                                children: const [
+                                  Icon(Icons.logout),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text("Log out")
+                                ],
+                              ))
+                        ]);
+                      }),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

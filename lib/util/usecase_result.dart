@@ -40,7 +40,9 @@ class ResultSuccess<T> extends Result<T> {
 }
 
 class ResultOk extends Result<void> {
-  ResultOk() : super._();
+  ResultOk() : super._() {
+    _error = '';
+  }
 
   @override
   void when(
