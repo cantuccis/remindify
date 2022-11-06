@@ -50,7 +50,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Center(
                       child: ElevatedButton(
-                    child: const Text("Create reminder"),
+                    child: SizedBox(
+                      width: 110,
+                      height: 40,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.add),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          SizedBox(
+                            width: 80,
+                            child: FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Text("Create reminder")),
+                          ),
+                        ],
+                      ),
+                    ),
                     onPressed: () {
                       showDialog(
                           context: context,
