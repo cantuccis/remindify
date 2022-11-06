@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "366342800582",
+    "project_id": "remindify-bd881",
+    "storage_bucket": "remindify-bd881.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366342800582:android:c0995a5dac8865fcaf83c7",
+        "android_client_info": {
+          "package_name": "com.example.remindify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366342800582-92n0pkgf8f8653ggf37pqp18vn0ju9c4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyr1gxPj2VNV_94n8FtpIKQN58fAU9aSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366342800582-92n0pkgf8f8653ggf37pqp18vn0ju9c4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "366342800582-k0kp01bjq8q8lu84i3vi22f77enfdr5s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.remindify"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
