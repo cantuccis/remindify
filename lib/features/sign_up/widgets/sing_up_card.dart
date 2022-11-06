@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:remindify/features/sign_up/bloc/sign_up_cubit.dart';
 import 'package:remindify/features/sign_up/bloc/sign_up_state.dart';
 import 'package:remindify/util/assets.dart';
+import 'package:remindify/views/home_screen.dart';
 
 class SignUpCard extends StatefulWidget {
   SignUpCard({
@@ -46,10 +48,14 @@ class _SignUpCardState extends State<SignUpCard> {
   Widget build(BuildContext context) {
     return BlocConsumer<SignUpCubit, SignUpState>(
       bloc: _signUpCubit,
-      listener: (blocContext, state) {},
+      listener: (blocContext, state) {
+        Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+      },
+      listenWhen: (previous, current) =>
+          previous.loading && !current.loading && current.errorMessage.isEmpty,
       builder: (bctx, SignUpState signUpState) {
         return Card(
-          elevation: 5,
+          elevation: kIsWeb ? 5 : 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),

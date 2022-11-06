@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:remindify/entities/remindify_user.dart';
-import 'package:remindify/interfaces/repositories/users_repository.dart';
+import 'package:remindify/interfaces/repositories/user_repository.dart';
 import 'package:remindify/interfaces/services/auth_service.dart';
 import 'package:remindify/util/exception_handler.dart';
 import 'package:remindify/util/usecase_result.dart';
@@ -20,7 +21,6 @@ class FirebaseAuthService extends AuthService {
   Future<Result<RemindifyUser>> signInWithEmailAndPassword({
     required String email,
     required String password,
-    bool persist = true,
     required Function() onSignedOut,
   }) async {
     late final Result<RemindifyUser> result;
@@ -29,8 +29,10 @@ class FirebaseAuthService extends AuthService {
         email: email,
         password: password,
       );
-      await _firebaseAuth
-          .setPersistence(persist ? Persistence.SESSION : Persistence.NONE);
+
+      if (kIsWeb) {
+        await _firebaseAuth.setPersistence(Persistence.SESSION);
+      }
 
       if (authResult.user != null) {
         result = await _userRepository.getUser(userId: authResult.user!.uid);
@@ -39,10 +41,10 @@ class FirebaseAuthService extends AuthService {
       }
 
       _firebaseAuth.userChanges().listen((event) {
-        if(event == null) {
+        if (event == null) {
           onSignedOut();
         }
-       });
+      });
     } catch (e, stacktrace) {
       handleException(e, stacktrace);
       if (e is FirebaseAuthException) {
@@ -83,7 +85,7 @@ class FirebaseAuthService extends AuthService {
       final exists = (existsResult as ResultSuccess<bool>).data;
       if (exists) return Result.error(message: "User already exists");
 
-      UserCredential  authResult =
+      UserCredential authResult =
           await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -99,5 +101,17 @@ class FirebaseAuthService extends AuthService {
       handleException(e, stacktrace, info: "email: $email");
       return Result.error();
     }
+  }
+
+  @override
+  Future<Result<RemindifyUser?>> restoreSession() async {
+    late final Result<RemindifyUser?> result;
+    final firebaseUser = await FirebaseAuth.instance.userChanges().first;
+    if (firebaseUser != null) {
+      result = await _userRepository.getUser(userId: firebaseUser.uid);
+    } else {
+      result = Result.success(data: null);
+    }
+    return result;
   }
 }

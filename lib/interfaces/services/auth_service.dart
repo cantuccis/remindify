@@ -8,6 +8,8 @@ abstract class AuthService {
     required Function() onSignedOut,
   });
 
+  Future<Result<RemindifyUser?>> restoreSession();
+
   Future<Result> signUpWithEmailAndPassword({
     required String email,
     required String password,

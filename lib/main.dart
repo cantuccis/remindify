@@ -1,15 +1,16 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_color_generator/material_color_generator.dart';
 import 'package:remindify/dependency_injection/service_locator.dart';
 import 'package:remindify/features/auth/bloc/auth_cubit.dart';
-import 'package:remindify/features/auth/bloc/auth_state.dart';
+import 'package:remindify/features/reminders/bloc/reminders_cubit.dart';
 import 'package:remindify/features/sign_up/bloc/sign_up_cubit.dart';
 import 'package:remindify/firebase_options.dart';
-import 'package:remindify/views/home_screen.dart';
-import 'package:remindify/views/routes.dart';
 import 'package:remindify/views/routes.dart';
 import 'package:remindify/views/auth_screen.dart';
 
@@ -18,7 +19,23 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   await ServiceLocator.instance.initialize();
+
+  if(!kIsWeb){
+AwesomeNotifications()
+      .initialize('resource://drawable/res_notification_app_icon', [
+    NotificationChannel(
+        channelKey: 'basic_channel',
+        channelName: "Basic Notifications",
+        channelDescription: 'Reminder notifications',
+        locked: true,
+        defaultColor: Colors.blueGrey,
+        importance: NotificationImportance.High,
+        channelShowBadge: true)
+  ]);
+  }
+  
   runApp(const MyApp());
 }
 
@@ -37,14 +54,18 @@ class MyApp extends StatelessWidget {
           BlocProvider<SignUpCubit>(
             create: (BuildContext context) => SignUpCubit(),
           ),
+          BlocProvider<RemindersCubit>(
+            create: (BuildContext context) => RemindersCubit(),
+          ),
         ],
         child: MaterialApp(
           title: _title,
           routes: routes,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primarySwatch:
-                generateMaterialColor(color: Color.fromARGB(255, 56, 113, 167)),
+            dividerColor: Colors.transparent,
+            primarySwatch: generateMaterialColor(
+                color: const Color.fromARGB(255, 56, 113, 167)),
             fontFamily: GoogleFonts.karla().fontFamily,
             // textTheme: GoogleFonts.karlaTextTheme(
             //   ThemeData(brightness: Brightness.light).textTheme,
