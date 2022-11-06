@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:remindify/entities/remindify_user.dart';
-import 'package:remindify/interfaces/repositories/users_repository.dart';
+import 'package:remindify/interfaces/repositories/user_repository.dart';
 import 'package:remindify/interfaces/services/auth_service.dart';
 import 'package:remindify/util/exception_handler.dart';
 import 'package:remindify/util/usecase_result.dart';
@@ -20,7 +21,6 @@ class FirebaseAuthService extends AuthService {
   Future<Result<RemindifyUser>> signInWithEmailAndPassword({
     required String email,
     required String password,
-    bool persist = true,
     required Function() onSignedOut,
   }) async {
     late final Result<RemindifyUser> result;
@@ -30,8 +30,9 @@ class FirebaseAuthService extends AuthService {
         password: password,
       );
 
-      await _firebaseAuth
-          .setPersistence(persist ? Persistence.SESSION : Persistence.NONE);
+      if (kIsWeb) {
+        await _firebaseAuth.setPersistence(Persistence.SESSION);
+      }
 
       if (authResult.user != null) {
         result = await _userRepository.getUser(userId: authResult.user!.uid);
@@ -107,9 +108,9 @@ class FirebaseAuthService extends AuthService {
     late final Result<RemindifyUser?> result;
     final firebaseUser = await FirebaseAuth.instance.userChanges().first;
     if (firebaseUser != null) {
-        result = await _userRepository.getUser(userId: firebaseUser.uid);
+      result = await _userRepository.getUser(userId: firebaseUser.uid);
     } else {
-        result = Result.success(data: null);
+      result = Result.success(data: null);
     }
     return result;
   }

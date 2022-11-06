@@ -27,6 +27,14 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> signInSubmit(String email, String password) async {
     emit(state.toLoading());
+    if (email.isEmpty) {
+      emit(state.toError(error: "Email is empty"));
+      return;
+    }
+    if (password.isEmpty) {
+      emit(state.toError(error: "Password is empty"));
+      return;
+    }
     final result = await _authService.signInWithEmailAndPassword(
         email: email,
         password: password,

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,7 +45,7 @@ class _SignInCardState extends State<SignInCard> {
       },
       builder: (bctx, AuthState signInState) {
         return Card(
-          elevation: 5,
+          elevation: kIsWeb ? 5 : 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),

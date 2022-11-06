@@ -10,7 +10,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit() : super(SignUpState.initial) {
     _authService = GetIt.instance.get<AuthService>();
   }
-
+  
   void setInitialState() => emit(SignUpState.initial);
 
   Future<void> signUpWithEmailAndPasswordSubmit(

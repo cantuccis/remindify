@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:remindify/entities/remindify_user.dart';
-import 'package:remindify/interfaces/repositories/users_repository.dart';
+import 'package:remindify/interfaces/repositories/user_repository.dart';
 import 'package:remindify/util/exception_handler.dart';
 import 'package:remindify/util/usecase_result.dart';
 
