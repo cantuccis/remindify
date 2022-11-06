@@ -5,14 +5,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:remindify/entities/reminder.dart';
 import 'package:remindify/interfaces/repositories/reminder_repository.dart';
+import 'package:remindify/interfaces/services/notifications_service.dart';
 
 import 'reminders_state.dart';
 
 class RemindersCubit extends Cubit<RemindersState> {
   late final ReminderRepository _reminderRepository;
+  late final NotificationsService _notificationsService;
 
   RemindersCubit() : super(RemindersState.initial) {
     _reminderRepository = GetIt.instance.get<ReminderRepository>();
+    _notificationsService = GetIt.instance.get<NotificationsService>();
   }
 
   void setInitialState() => emit(RemindersState.initial);
@@ -27,24 +30,6 @@ class RemindersCubit extends Cubit<RemindersState> {
     );
   }
 
-  Future<void> _scheduleNotifications(Reminder reminder) async {
-    await AwesomeNotifications().createNotification(
-        content: NotificationContent(
-            id: reminder.id.hashCode,
-            channelKey: 'basic_channel',
-            title: reminder.title,
-            body: reminder.description,
-            notificationLayout: NotificationLayout.Default),
-        schedule: NotificationCalendar(
-          year: reminder.reminderDate!.year,
-          month: reminder.reminderDate!.month,
-          day: reminder.reminderDate!.day,
-          hour: reminder.reminderDate!.hour,
-          minute: reminder.reminderDate!.minute,
-          second: 0,
-          millisecond: 0,
-        ));
-  }
 
   Future<void> addReminder(Reminder reminder) async {
     emit(state.toLoading());
@@ -53,7 +38,7 @@ class RemindersCubit extends Cubit<RemindersState> {
       final result = await _reminderRepository.addReminder(reminder: reminder);
       result.when(
         onSuccess: (_) {
-          _scheduleNotifications(reminder);
+          _notificationsService.scheduleNotification(reminder: reminder);
           emit(
             state.toSuccess(successMessage: "Reminder successfully addded"),
           );
@@ -74,7 +59,7 @@ class RemindersCubit extends Cubit<RemindersState> {
       ),
     );
     _reminderRepository.removeReminder(userId: userId, reminderId: reminderId);
-    AwesomeNotifications().cancelSchedule(reminderId.hashCode);
+    _notificationsService.cancelNotification(id: reminderId);
   }
 
   bool _validateReminder(Reminder reminder) {

@@ -1,8 +1,10 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:remindify/features/auth/widgets/sing_in_card.dart';
 import 'package:remindify/features/sign_up/widgets/sing_up_card.dart';
+import 'package:remindify/interfaces/services/notifications_service.dart';
 
 class AuthScreen extends StatefulWidget {
   static const String routeName = "auth";
@@ -19,43 +21,9 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   void initState() {
     super.initState();
-    if (!kIsWeb) {
-      AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-        if (!isAllowed) {
-          showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                    title: const Text("Allow Notifications"),
-                    content: const Text(
-                        "Send notification permissions must be enabled for this app"),
-                    actions: [
-                      TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text(
-                            "Don\'t Allow",
-                            style: TextStyle(color: Colors.grey, fontSize: 18),
-                          )),
-                      TextButton(
-                          onPressed: () {
-                            AwesomeNotifications()
-                                .requestPermissionToSendNotifications()
-                                .then((_) => Navigator.of(context).pop());
-                          },
-                          child: const Text(
-                            "Allow",
-                            style: TextStyle(
-                              color: Colors.teal,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ))
-                    ],
-                  ));
-        }
-      });
-    }
+    GetIt.instance
+        .get<NotificationsService>()
+        .requestPermissions(context: context);
   }
 
   @override

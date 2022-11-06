@@ -21,20 +21,6 @@ void main() async {
   );
 
   await ServiceLocator.instance.initialize();
-
-  if(!kIsWeb){
-AwesomeNotifications()
-      .initialize('resource://drawable/res_notification_app_icon', [
-    NotificationChannel(
-        channelKey: 'basic_channel',
-        channelName: "Basic Notifications",
-        channelDescription: 'Reminder notifications',
-        locked: true,
-        defaultColor: Colors.blueGrey,
-        importance: NotificationImportance.High,
-        channelShowBadge: true)
-  ]);
-  }
   
   runApp(const MyApp());
 }
