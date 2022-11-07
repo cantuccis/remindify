@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Center(
                       child: ElevatedButton(
                     child: SizedBox(
-                      width: 110,
+                      width: 140,
                       height: 40,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 3,
                           ),
                           SizedBox(
-                            width: 80,
+                            width: 110,
                             child: FittedBox(
                                 fit: BoxFit.fitWidth,
                                 child: Text("Create reminder")),
