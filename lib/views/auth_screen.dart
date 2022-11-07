@@ -54,6 +54,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           signUpButton: SizedBox(
                             width: 200,
                             child: TextButton(
+                                key: const ValueKey("or-sign-up-button"),
                                 onPressed: () {
                                   setState(() => _showSignIn = false);
                                 },

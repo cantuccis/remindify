@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:remindify/features/sign_up/bloc/sign_up_cubit.dart';
 import 'package:remindify/features/sign_up/bloc/sign_up_state.dart';
 import 'package:remindify/util/assets.dart';
+import 'package:remindify/util/widgets/logo_and_phrase.dart';
 import 'package:remindify/views/home_screen.dart';
 
 class SignUpCard extends StatefulWidget {
@@ -65,21 +66,7 @@ class _SignUpCardState extends State<SignUpCard> {
               padding: const EdgeInsets.all(15),
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 45, left: 45, right: 45, bottom: 15),
-                      child: SvgPicture.asset(AssetUri.appIconSvg, height: 80),
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      "Never forget your tasks ever again!",
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Colors.grey, fontWeight: FontWeight.w200),
-                    ),
-                  ),
+                  const LogoAndSlogan(),
                   const SizedBox(
                     height: 30,
                   ),
@@ -121,6 +108,7 @@ class _SignUpCardState extends State<SignUpCard> {
         width: 150,
         child: !signUpState.loading
             ? ElevatedButton(
+                key: const ValueKey("sign-up-card-submit-button"),
                 onPressed: _isConfirmPasswordOk ? _signUp : null,
                 child: const Text("Sign Up"))
             : const Center(

@@ -30,7 +30,6 @@ class RemindersCubit extends Cubit<RemindersState> {
     );
   }
 
-
   Future<void> addReminder(Reminder reminder) async {
     emit(state.toLoading());
     reminder.reminderDate = state.selectedDate;
