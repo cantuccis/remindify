@@ -1,7 +1,20 @@
 # Remindify
+![Remindify](assets/icons/app_icon_small.png)
 
 Get notified on your tasks. This is a flutter+firebase sample project that shows how to use bloc architecture and unit/widget/driver testing in a maintainable and efficient way.
 
+## Execute
+### Android and Web
+* Execute `flutter run`
+* Choose your device
+### IOS
+Build using xcode
+
+## Development Environment
+`Flutter 3.4.0-17.2.pre • channel dev • https://github.com/flutter/flutter.git`<br>
+`Framework • revision d6260f127f (7 weeks ago) • 2022-09-21 13:33:49 -0500`<br>
+`Engine • revision 3950c6140a`<br>
+`Tools • Dart 2.19.0 (build 2.19.0-146.2.beta) • DevTools 2.16.0`<br>
 ## Project structure (lib)
 ### Entities
 Data structures and logic that modify that data go here. A good entity knows how to marshal and unmarshal itself. It is handy to keep collection keys as static members of each entity.
@@ -37,13 +50,15 @@ Handy classes used across the project.
 ## Good practices
 
 ### Bloc architecture
-Your widgets should not have any presentation logic. All communication and logic go in blocs that will emit a stream of states that widgets consume.
+Your widgets should only have presentation logic (input/output). All communication and state management of the app go in blocs that will emit a stream of states. Widgets will consume and show those states.
 Bloc is a great state management package but it is dangerous!! :skull: If not used properly, you will quickly find yourself in a war field of events firing from all places against you (PTSD guaranteed).
 To avoid losing your soul and mind, I strongly encourage the use of cubits rather than blocs. Cubits only emit a stream of events from the bloc to the widgets, and take requests using functions. That makes events management 50% easier since we eliminated the incoming events. There is a catch tho: you lose event traceability (which sounds cool but then nobody actually uses it).
 Cubits are also easier to test, which is nice considering that testing event-driven architectures takes time.
 
 ### The Result monad
-[Burritos]{https://emorehouse.wescreates.wesleyan.edu/silliness/burrito_monads.pdf} are great! The result monad enforces error management by wrapping a result in a class that takes two required callbacks: onSuccess and onError. By making those required, developers have no other choice than handle those errors. This functional programming feature is suitable when calling any outsider (API, Firestore, etc) or when performing risky operations (compressing an image or accessing the filesystem). This wrapper will prevent the app from exploding and will keep try/catch structures well organized.
+[Burritos](https://emorehouse.wescreates.wesleyan.edu/silliness/burrito_monads.pdf) are great! The result monad enforces error management by wrapping a result in a class that takes two required callbacks: onSuccess and onError. By making those required, developers have no other choice than handle those errors. This functional programming feature is suitable when calling any outsider (API, Firestore, etc) or when performing risky operations (compressing an image or accessing the filesystem). This wrapper will prevent the app from exploding and will keep try/catch structures well organized.
 
-### How to do bloc, widget, and integration tests
+### How to do bloc/widget/integration tests
 This project contains an example of how to do it taking advantage of the abstractions. Uses Mocktail for mocks.
+
+
