@@ -123,7 +123,7 @@ class _SignInCardState extends State<SignInCard> {
                                       ),
                                     ),
                                     border: const UnderlineInputBorder(),
-                                    label: Text(
+                                    label: const Text(
                                       'Enter your password',
                                     ),
                                   ),
