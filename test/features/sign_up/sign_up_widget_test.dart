@@ -7,6 +7,7 @@ import 'package:remindify/interfaces/services/auth_service.dart';
 import 'package:remindify/util/widgets/logo_and_phrase.dart';
 
 import '../../dependency_injector.dart';
+import '../../responsive_test_package/screen_size.dart';
 import '../../widget_testing_util.dart';
 
 class MockAuthService extends Mock implements AuthService {}
@@ -18,13 +19,17 @@ main() {
 
   Widget testWidget = createTesteableWidget(
     SignUpCard(
-      signInButton: SizedBox(
-        width: 200,
-        child: TextButton(
-            onPressed: () {},
-            child: const Text(
-              'Go to Sign In',
-            )),
+      signInButton: Row(
+        children: [
+          SizedBox(
+            width: 380,
+            child: TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'Go to Sign In',
+                )),
+          ),
+        ],
       ),
     ),
   );
@@ -88,8 +93,9 @@ main() {
         );
       },
     );
-    testWidgets(
+    testResponsiveWidgets(
       "Disabled button until password match confirm password",
+      breakpoints: ValueVariant<ScreenSize>({iPhone13ProMax}),
       (tester) async {
         await tester.pumpWidget(testWidget);
         expect(
